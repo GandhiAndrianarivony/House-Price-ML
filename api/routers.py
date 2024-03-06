@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from apps.ml_models import urls
-
+from .schema import graphql_app
 app = FastAPI()
 
 
-app.include_router(urls.router)
+# app.include_router(urls.router)
+app.include_router(graphql_app, prefix="/graphql")
