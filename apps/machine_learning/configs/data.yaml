@@ -1,0 +1,3 @@
+DATA_ENCODER:
+  RandomForestRegressor: 
+    CATEGORICAL_ENCODER: apps/machine_learning/model_weights/CategoricalEncoder-24-03-08.pkl

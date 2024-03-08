@@ -1,7 +1,11 @@
+import typing
 import datetime
+
 import strawberry
 
-from .choices import (
+from .choices.models import RegressorModel
+
+from .choices.fields import (
     NeighborHood,
     MSZoning,
     LotShape,
@@ -11,7 +15,8 @@ from .choices import (
     MasVnrType,
     Exter,
     Foundation,
-    Bsmt,
+    BsmtQual,
+    BsmtCond,
     BsmtExposure,
     BsmtFinType,
     HeatingQC,
@@ -29,6 +34,7 @@ from .choices import (
 
 @strawberry.input
 class HouseFeaturesInput:
+    model_name: RegressorModel
     MSZoning: MSZoning
     LotShape: LotShape
     Neighborhood: NeighborHood
@@ -39,8 +45,8 @@ class HouseFeaturesInput:
     MasVnrType: MasVnrType
     ExterQual: Exter
     Foundation: Foundation
-    BsmtQual: Bsmt
-    BsmtCond: Bsmt
+    BsmtQual: BsmtQual
+    BsmtCond: BsmtCond
     BsmtExposure: BsmtExposure
     BsmtFinType1: BsmtFinType
     HeatingQC: HeatingQC
@@ -57,25 +63,39 @@ class HouseFeaturesInput:
     LotFrontage: float
     LotArea: float
     OverallQual: float
-    YearBuilt: datetime.date
-    YearRemodAdd: datetime.date
+    YearBuilt: int
+    YearRemodAdd: int
     MasVnrArea: float
     BsmtFinSF1: float
     BsmtUnfSF: float
     TotalBsmtSF: float
-    FlrSF1: float
-    FlrSF2: float
     GrLivArea: float
     BsmtFullBath: float
-    BsmtHalfBath: float
+    HalfBath: float
     FullBath: float
     BedroomAbvGr: float
     TotRmsAbvGrd: float
     Fireplaces: float
-    GarageYrBlt: datetime.date
+    GarageYrBlt: int
     GarageCars: float
     GarageArea: float
     WoodDeckSF: float
     OpenPorchSF: float
     EnclosedPorch: float
+    second_flr_SF: float
+    first_flr_SF: float
 
+    def to_dict(self) -> dict:
+        # Initialize an empty dictionary to store the user input
+        user_dict = {}
+
+        # Iterate over the fields in the class
+        for field_name in self.__annotations__:
+            # Get the value of the field using getattr
+            field_value = getattr(self, field_name)
+
+            # Add the field and its value to the dictionary
+            if field_value is not None:
+                user_dict[field_name] = field_value
+
+        return user_dict
